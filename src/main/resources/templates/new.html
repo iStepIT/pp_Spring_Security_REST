@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Новый пользователь</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{'/admin/new'}" th:object="${user}">
+
+  <label for="username">Имя: </label>
+  <input type="text" th:field="*{username}" id="username"/>
+  <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+  <br/>
+
+  <label for="password">Пароль: </label>
+  <input type="text" th:field="*{password}" id="password"/>
+  <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+  <br/>
+
+  <label for="email">Email: </label>
+  <input type="text" th:field="*{email}" id="email"/>
+  <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+  <br>
+  <p>
+    <label>Roles:
+      <input type="checkbox" th:name="allRoles"
+             th:each="role , roleStat: ${allRoles}"
+             th:text="${role.authority}"
+             th:value="${role.id}"
+             th:field="*{roles}"
+      />
+    </label>
+  </p>
+
+  <input type="submit" value="Сохранить"/>
+</form>
+<br>
+<button onclick="window.location.href = '/logout'">Выйти из профиля</button>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все пользователи</title>
+</head>
+<body>
+<h2>Все пользователи</h2>
+<table class="table table-striped table hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>username</th>
+        <th>Email</th>
+        <th colspan="2">Роль</th>
+        <th colspan="2">Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.getId()}"/>
+        <td th:text="${user.getUsername()}"/>
+        <td th:text="${user.getEmail()}"/>
+        <td th:text="${user.getRoles}"/>
+        <td>
+            <a th:href="@{'/admin/edit?id='+${user.getId()}}">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{'/admin/delete?id='+${user.getId()}}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<button onclick="window.location.href = '/admin/new'">Добавить нового пользователя</button>
+<button onclick="window.location.href = '/user'">Мой профиль</button>
+<button onclick="window.location.href = '/logout'">Выйти из профиля</button>
+</body>
+</html>

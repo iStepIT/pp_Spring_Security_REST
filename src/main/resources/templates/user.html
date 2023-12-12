@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Данные пользователя</title>
+</head>
+<body>
+<p th:text="${'Пользователь: ' + user.username}">VALUE</p>
+
+<p th:text="${'Индефикатор: ' + user.id}">VALUE</p>
+
+<p th:text="${'Почта: ' + user.email}">VALUE</p>
+
+<a th:href="@{/edit(id=${user.id})}">Редактировать пользователя</a>
+<br>
+<br>
+<form method="GET" action="/delete">
+    <input type="hidden" name="id" th:value="${user.id}">
+    <button type="submit">Удалить пользователя</button>
+</form>
+<br>
+<button onclick="window.location.href = '/logout'">Выйти из профиля</button>
+</body>
+</html>
