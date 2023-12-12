@@ -69,7 +69,7 @@ public class WebController {
     }
 
     @PostMapping("/admin/new")
-    public String create(@ModelAttribute("user") @Valid  User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "new";
         }
@@ -89,7 +89,7 @@ public class WebController {
         if (user == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
         }
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "user";
     }
 

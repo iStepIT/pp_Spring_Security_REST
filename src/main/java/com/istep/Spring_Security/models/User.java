@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 public class User implements UserDetails {
     public User() {
     }
@@ -34,11 +34,11 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Имя не может быть пустым")
     @Column(name = "username", unique = true)
-    @Size(min=4, message = "Не меньше 4 знаков")
+    @Size(min = 4, message = "Не меньше 4 знаков")
     private String username;
 
     @Column(name = "password")
-    @Size(min=4, message = "Не меньше 4 знаков")
+    @Size(min = 4, message = "Не меньше 4 знаков")
     private String password;
 
     @NotEmpty
@@ -61,6 +61,7 @@ public class User implements UserDetails {
         this.roles = roles;
         this.email = email;
     }
+
     public Collection<Role> getRoles() {
         return roles;
     }
