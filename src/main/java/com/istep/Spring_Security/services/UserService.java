@@ -1,4 +1,4 @@
-package com.istep.Spring_Security.service;
+package com.istep.Spring_Security.services;
 
 import com.istep.Spring_Security.models.User;
 

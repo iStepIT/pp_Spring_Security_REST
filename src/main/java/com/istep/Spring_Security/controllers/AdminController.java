@@ -1,11 +1,10 @@
 package com.istep.Spring_Security.controllers;
 
 import com.istep.Spring_Security.models.User;
-import com.istep.Spring_Security.service.RoleService;
-import com.istep.Spring_Security.service.UserService;
+import com.istep.Spring_Security.services.RoleService;
+import com.istep.Spring_Security.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,34 +14,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
-public class WebController {
+public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public WebController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
-
 
     @GetMapping("/admin")
     public String allUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "users";
     }
-
-//    @GetMapping("/user")
-//    public String userPage(Principal principal, Model model) {
-//        model.addAttribute("user", userService.getUserByName(principal.getName()));
-//        return "user";
-//    }
 
     @GetMapping("/admin/edit")
     public String editUserPage(@RequestParam("id") Long id, Model model) {
@@ -53,8 +43,9 @@ public class WebController {
 
     @PostMapping("/admin/edit")
     public String updateUser(@RequestParam("id") Long id,
-                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleService.getListRoles());
             return "edit";
         }
         userService.updateUser(user, id);
@@ -62,15 +53,16 @@ public class WebController {
     }
 
     @GetMapping("/admin/new")
-    public String createNewUser(Model model) {
+    public String createNewUser(Model model, Model roles) {
         model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.getListRoles());
+        roles.addAttribute("allRoles", roleService.getListRoles());
         return "new";
     }
 
     @PostMapping("/admin/new")
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleService.getListRoles());
             return "new";
         }
         userService.addUser(user);
@@ -82,16 +74,4 @@ public class WebController {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
-
-    @GetMapping("/user")
-    public String showUser(Principal principal, Model model) {
-        User user = userService.getUserByName(principal.getName());
-        if (user == null) {
-            throw new UsernameNotFoundException("Пользователь не найден");
-        }
-        model.addAttribute("user", user);
-        return "user";
-    }
-
-
 }

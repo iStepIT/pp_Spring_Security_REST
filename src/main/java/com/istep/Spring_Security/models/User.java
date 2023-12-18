@@ -1,7 +1,6 @@
 package com.istep.Spring_Security.models;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
@@ -46,8 +45,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -60,6 +58,7 @@ public class User implements UserDetails {
         this.password = password;
         this.roles = roles;
         this.email = email;
+
     }
 
     public Collection<Role> getRoles() {
@@ -108,7 +107,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return roles;
     }
 
     public String getPassword() {

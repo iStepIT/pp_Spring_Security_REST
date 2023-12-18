@@ -1,13 +1,11 @@
-package com.istep.Spring_Security.service;
+package com.istep.Spring_Security.services;
 
 import com.istep.Spring_Security.models.User;
-import com.istep.Spring_Security.repository.UserRepository;
+import com.istep.Spring_Security.repositories.UserRepository;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -18,7 +16,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -26,10 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        User userFind = userRepository.findById(id).orElse(null);
-        if (userFind == null) {
-            throw new EntityNotFoundException("Не нашли пользователя");
-        }
+        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
         return userRepository.findById(id).orElse(null);
     }
 
@@ -53,29 +48,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        User userDel = userRepository.findById(userId).orElse(null);
-        if (userDel == null) {
-            throw new EntityNotFoundException("Не нашли пользователя");
-        }
+        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         userRepository.deleteById(userId);
-    }
-
-
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Override
     @Transactional
     public void updateUser(User user, Long id) {
-        User userUp = userRepository.findById(id).orElse(null);
-        if (userUp == null) {
-            throw new EntityNotFoundException("Не нашли пользователя");
-        }
+        User userUp = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         userUp.setUsername(user.getUsername());
         userUp.setEmail(user.getEmail());
-        userUp.setPassword(passwordEncoder().encode(user.getPassword()));
+        userUp.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userUp.setRoles(user.getRoles());
 
         userRepository.flush();

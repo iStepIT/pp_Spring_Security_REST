@@ -1,7 +1,7 @@
-package com.istep.Spring_Security.service;
+package com.istep.Spring_Security.services;
 
 import com.istep.Spring_Security.models.Role;
-import com.istep.Spring_Security.repository.RoleRepository;
+import com.istep.Spring_Security.repositories.RoleRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,6 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-
 
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;

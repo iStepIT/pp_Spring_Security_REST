@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -18,6 +17,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private long id;
+
+
     @Column(name = "name", unique = true)
     private String name;
 
