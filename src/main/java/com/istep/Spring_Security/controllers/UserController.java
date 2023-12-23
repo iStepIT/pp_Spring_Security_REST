@@ -1,7 +1,8 @@
 package com.istep.Spring_Security.controllers;
 
 import com.istep.Spring_Security.models.User;
-import com.istep.Spring_Security.services.UserService;
+import com.istep.Spring_Security.services.UserServiceImpl;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,15 +12,16 @@ import java.security.Principal;
 
 @Controller
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public  UserController (UserService userService){
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
+
     @GetMapping("/user")
     public String showUser(Principal principal, Model model) {
 
-        User user = userService.getUserByName(principal.getName());
+        User user = userServiceImpl.getUserByName(principal.getName());
         if (user == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
         }

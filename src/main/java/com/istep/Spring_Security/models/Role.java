@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -16,13 +19,23 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private long id;
+    private Long id;
 
-
-    @Column(name = "name", unique = true)
+    @Column(name = "name_roles")
     private String name;
 
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
+
     public Role() {
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+    public Collection<User> getUsers() {
+        return users;
     }
 
     public long getId() {
@@ -43,7 +56,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return getName();
+        return name;
     }
 
     @Override
@@ -55,14 +68,12 @@ public class Role implements GrantedAuthority {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Role role = (Role) o;
-
-        return Objects.equals(name, role.name);
+        return Objects.equals(id, role.id) && Objects.equals(name, role.name) && Objects.equals(users, role.users);
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return Objects.hash(id, name, users);
     }
 }

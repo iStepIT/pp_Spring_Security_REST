@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.istep</groupId>
-	<artifactId>Spring_Security</artifactId>
+	<artifactId>Spring_Security_BootStrap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Spring_Security</name>
+	<firstName>Spring_Security</firstName>
 	<description>Spring_Security</description>
 	<properties>
 		<java.version>11</java.version>

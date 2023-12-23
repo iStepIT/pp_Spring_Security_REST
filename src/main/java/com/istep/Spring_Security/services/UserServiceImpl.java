@@ -30,11 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByName(String name) {
-        return userRepository.findByUsername(name);
+        return userRepository.getUserByName(name);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -47,21 +47,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Long userId) {
-        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        userRepository.deleteById(userId);
+    public void removeUser(Long id) {
+        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public void updateUser(User user, Long id) {
-        User userUp = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        userUp.setUsername(user.getUsername());
-        userUp.setEmail(user.getEmail());
-        userUp.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userUp.setRoles(user.getRoles());
-
-        userRepository.flush();
+    public void updateUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

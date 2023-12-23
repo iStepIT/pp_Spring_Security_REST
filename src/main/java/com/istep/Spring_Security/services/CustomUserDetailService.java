@@ -3,10 +3,13 @@ package com.istep.Spring_Security.services;
 import com.istep.Spring_Security.models.User;
 import com.istep.Spring_Security.repositories.UserRepository;
 
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -16,11 +19,13 @@ public class CustomUserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
         }
-        return userRepository.findByUsername(username);
+        User user = optionalUser.get();
+        Hibernate.initialize(user.getRoles());
+        return user;
     }
 }
