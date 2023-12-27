@@ -3,6 +3,7 @@ package com.istep.Spring_Security.services;
 import com.istep.Spring_Security.models.User;
 import com.istep.Spring_Security.repositories.UserRepository;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public User getUserByName(String name) {
-        return userRepository.getUserByName(name);
+    public User getUserByName(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -55,7 +54,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        User oldUser = getUserById(user.getId());
+        if (oldUser.getPassword().equals(user.getPassword()) || "".equals(user.getPassword())) {
+            user.setPassword(oldUser.getPassword());
+        } else {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         userRepository.save(user);
     }
+
+    @Override
+    public User getCurrentUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    };
 }

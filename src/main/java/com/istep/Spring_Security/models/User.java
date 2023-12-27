@@ -6,7 +6,6 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,14 +34,14 @@ public class User implements UserDetails {
     private Long id;
 
     @NotEmpty(message = "Имя не может быть пустым")
-    @Column(name = "name")
+    @Column(name = "username")
     @Size(min = 4, message = "Не меньше 4 знаков")
-    private String name;
+    private String username;
 
     @NotEmpty(message = "Фамилия не может быть пустая")
-    @Column(name = "last_name")
+    @Column(name = "lastname")
     @Size(min = 4, message = "Не меньше 4 знаков")
-    private String lastName;
+    private String lastname;
 
     //  @NotEmpty(message = "Не может быть пустым")
     // @Size(min = 1, max = 120, message = "Возраст не может быть меньше 1 или больше 120")
@@ -58,8 +57,8 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+   //  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -70,11 +69,21 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, Long age, String email) {
-        this.name = name;
-        this.lastName = lastName;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public User(Long id, String username, String lastname, Long age, String email, Collection<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.lastname = lastname;
         this.age = age;
         this.email = email;
+        this.roles = roles;
     }
 
     @Override
@@ -91,19 +100,19 @@ public class User implements UserDetails {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Long getAge() {
@@ -160,15 +169,15 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", Name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", Name='" + username + '\'' +
+                ", lastName='" + lastname + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +
@@ -180,11 +189,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(roles, user.roles);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(lastname, user.lastname) && Objects.equals(age, user.age) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, age, password, email, roles);
+        return Objects.hash(id, username, lastname, age, password, email, roles);
     }
 }

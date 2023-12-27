@@ -1,31 +1,32 @@
 package com.istep.Spring_Security.controllers;
 
 import com.istep.Spring_Security.models.User;
+import com.istep.Spring_Security.repositories.UserRepository;
+import com.istep.Spring_Security.services.UserService;
 import com.istep.Spring_Security.services.UserServiceImpl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.Optional;
 
-@Controller
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/user")
-    public String showUser(Principal principal, Model model) {
-
-        User user = userServiceImpl.getUserByName(principal.getName());
-        if (user == null) {
-            throw new UsernameNotFoundException("Пользователь не найден");
-        }
-        model.addAttribute("user", user);
-        return "user";
+    @GetMapping("/showAccount")
+        public ResponseEntity<User> showUser() {
+        return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
     }
 }
