@@ -43,8 +43,8 @@ public class User implements UserDetails {
     @Size(min = 4, message = "Не меньше 4 знаков")
     private String lastname;
 
-    //  @NotEmpty(message = "Не может быть пустым")
-    // @Size(min = 1, max = 120, message = "Возраст не может быть меньше 1 или больше 120")
+    @NotEmpty(message = "Не может быть пустым")
+    @Size(min = 1, max = 120, message = "Возраст не может быть меньше 1 или больше 120")
     @Column(name = "age")
     private Long age;
 
@@ -57,7 +57,6 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-   //  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @ManyToMany(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",

@@ -1,20 +1,15 @@
 package com.istep.Spring_Security.controllers;
 
 import com.istep.Spring_Security.models.User;
-import com.istep.Spring_Security.repositories.UserRepository;
 import com.istep.Spring_Security.services.UserService;
 import com.istep.Spring_Security.services.UserServiceImpl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/showAccount")
-        public ResponseEntity<User> showUser() {
+    public ResponseEntity<User> showUser() {
         return new ResponseEntity<>(userService.getCurrentUser(), HttpStatus.OK);
     }
 }
